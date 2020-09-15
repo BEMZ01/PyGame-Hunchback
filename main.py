@@ -3,7 +3,7 @@ import random
 import time
 pygame.init()
 #init pygame
-
+# set varibles
 y = 500
 x = 700
 BLACK = (0, 0, 0)
