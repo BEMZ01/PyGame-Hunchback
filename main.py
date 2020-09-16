@@ -45,31 +45,84 @@ def display_fps():
     render(
         fonts[0],
         what=str(int(clock.get_fps())),
-        color="black",
+        color="white",
         where=(0, 0))
+
 
 def render_menu(x, y):
   display_surface = pygame.display.set_mode((0, 0))
   image = pygame.image.load(r'assets/visual/logo.PNG') 
   display_surface.blit(image, (0, 0))
+  message_display("Press SPACE to play.", 500, 750)
 
+def text_objects(text, font):
+    textSurface = font.render(text, True, WHITE)
+    return textSurface, textSurface.get_rect()
+
+def message_display(text, x, y):
+    largeText = pygame.font.Font('freesansbold.ttf',50)
+    TextSurf, TextRect = text_objects(text, largeText)
+    TextRect.center = ((x/2),(y/2))
+    gameDisplay.blit(TextSurf, TextRect)
 
 init_screen_and_clock(x, y)
+gameDisplay = pygame.display.set_mode((x,y))
 # This create different font size in one line
 fonts = create_fonts([32, 16, 14, 8])
 for x in range(0, 10):
     time.sleep(0.05)
     screen.fill(random.choice(COLORS))
     pygame.display.flip()
-loop = 1
-while loop:
+
+def menu():
+  loop = 1
+  tick = 0
+  while loop:
+    tick += 1
     screen.fill(BLACK)
-    display_fps()
     render_menu(x, y)
+    display_fps()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             loop = 0
+        elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    return(1)
     clock.tick(60)
     pygame.display.flip()
+    if tick == 44:
+      tick = 0
+  return(0) # there was an error
 
+def game():
+  loop = 1
+  tick = 0
+  while loop:
+    tick += 1
+    screen.fill(BLACK)
+    display_fps()
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        loop = 0
+      elif event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_SPACE:
+          jump = 1
+        elif event.key == pygame.K_a:
+          xmove = -5
+        elif event.key == pygame.K_d:
+          xmove = 5
+      elif event.type == pygame.KEYUP:
+        if event.key == pygame.K_SPACE:
+          jump = 0
+        elif (event.key == pygame.K_a) or (event.key == pygame.K_d):
+          xmove = 0
+    clock.tick(60)
+    pygame.display.flip()
+    if tick == 44:
+      tick = 0
+  return(0)
+      
+if menu() == 1:
+  game()
+print("goodbye")
 pygame.quit()
