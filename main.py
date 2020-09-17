@@ -115,16 +115,15 @@ def menu():
 
 def game():
   playerx = 100
-  playery = 100
+  playery = 400
   tempy = 0
   x = 0
   y = 0
   isJump = False
-  jumpCount = 5
+  jumpCount = 4
   loop = 1
   tick = 0
   while loop:
-    
     tick += 1
     screen.fill(BLACK)
     if playery < 0:
@@ -139,21 +138,21 @@ def game():
     if keys[pygame.K_ESCAPE]:
       loop = 0
       break
-    elif keys[pygame.K_a]:
-      x = -1
+    if keys[pygame.K_a]:
+      x = -10
     elif keys[pygame.K_d]:
-      x = 1
+      x = 10
     if keys[pygame.K_w]:
       isJump = True
     else:
       x = 0
     if not isJump:
       tempy = playery
-    if jumpCount >= -5 and isJump:
+    if jumpCount >= -4 and isJump:
       y -= (jumpCount * abs(jumpCount)) * 0.5
       jumpCount -= 1
     else: # This will execute if our jump is finished
-      jumpCount = 5
+      jumpCount = 4
       isJump = False
       playery = tempy
       # Resetting our Variables
