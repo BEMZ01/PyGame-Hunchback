@@ -4,10 +4,14 @@ import time
 import os
 import logging
 from datetime import datetime
-logging.basicConfig(filename=str(datetime.now())+'.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+try: # linux
+  logging.basicConfig(filename='logs/'+str(datetime.now())+'.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+except OSError: # windows
+  logging.basicConfig(filename='logs/'+str(datetime.now()).replace(":", ";")+'.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+
 def pprint(text):
   print(text)
-  logging.debug(str(datetime.now())+" :\t"+str(text))
+  logging.debug(str(datetime.now())+" -\t"+str(text))
 pygame.init()
 try:
   pygame.mixer.init()
@@ -112,36 +116,42 @@ def menu():
 
 def game():
   playerx = 100
-  x_speed = 15
-  pressed_left = False
-  pressed_right = False
+  playery = 100
+  x = 0
+  jump = False
   loop = 1
   tick = 0
   while loop:
     tick += 1
     screen.fill(BLACK)
-    player(playerx, 100)
+    if playerx > 0 and playerx < 701:
+      player(playerx, 100)
+    else:
+      playerx = 0
+      player(playerx, 100)
     display_fps()
-    for event in pygame.event.get():
-      if event.type == pygame.QUIT:
-        loop = 0
-      elif event.type == pygame.KEYDOWN:          # check for key presses          
-        if event.key == pygame.K_LEFT:        # left arrow turns left
-            pressed_left = True
-        elif event.key == pygame.K_RIGHT:     # right arrow turns right
-            pressed_right = True
-      elif event.type == pygame.KEYUP:            # check for key releases
-        if event.key == pygame.K_LEFT:        # left arrow turns left
-            pressed_left = False
-        elif event.key == pygame.K_RIGHT:     # right arrow turns right
-            pressed_right = False
-        elif event.key == pygame.K_ESCAPE:
-          loop = 0
-          break
-    if pressed_left:
-      playerx -= x_speed
-    if pressed_right:
-      playerx += x_speed
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_ESCAPE]:
+      loop = 0
+      break
+    elif keys[pygame.K_a]:
+      x = -1
+    elif keys[pygame.K_d]:
+      x = 1
+    elif keys[pygame.K_w]:
+      jump = True
+    else:
+      x = 0
+      jump = False
+    if jump:
+      for x in range(0, 10):
+        playery += x
+        screen.fill(BLACK)
+        player(playerx,playery)
+        pygame.display.flip()
+      playery = 100
+
+    playerx += x
 
     clock.tick(60)
     pygame.display.flip()
