@@ -2,6 +2,11 @@ import pygame
 import random
 import time
 pygame.init()
+try:
+  pygame.mixer.init()
+  audio = True
+except pygame.error:
+  audio = False
 #init pygame
 # set varibles
 y = 500
@@ -121,8 +126,11 @@ def game():
     if tick == 44:
       tick = 0
   return(0)
-      
+
+print("Audio -", audio)
+print("Enter Menu")
 if menu() == 1:
+  print("Enter Game")
   game()
 print("goodbye")
 pygame.quit()
