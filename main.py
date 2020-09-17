@@ -117,6 +117,7 @@ def menu():
 def game():
   playerx = 100
   playery = 100
+  cooldown = False
   x = 0
   jump = False
   loop = 1
@@ -144,19 +145,17 @@ def game():
       x = 0
       jump = False
     if jump:
-      for x in range(0, 10):
-        playery += x
-        screen.fill(BLACK)
-        player(playerx,playery)
-        pygame.display.flip()
-      playery = 100
-
+      if cooldown == False:
+        cooldown = True
+        playery += 5
+      else:
+        playery += -5
     playerx += x
-
     clock.tick(60)
     pygame.display.flip()
     if tick == 44:
       tick = 0
+      cooldown = False
   return(0)
 
 pprint("Audio -"+str(audio))
