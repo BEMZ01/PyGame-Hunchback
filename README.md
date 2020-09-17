@@ -6,3 +6,5 @@ Hunchback (1983) emulation using pygame.
 
 ## Installation
 > Download as zip, install Python and Pygame, run main.py.
+
+Close the game at anytime using K_ESCAPE (ESC)
