@@ -126,9 +126,12 @@ def menu():
 
 def game():
   playerx = 100
-  xmove = 0
+  x_speed = 15
+  pressed_left = False
+  pressed_right = False
   loop = 1
   tick = 0
+  
   while loop:
     tick += 1
     screen.fill(BLACK)
@@ -137,23 +140,24 @@ def game():
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         loop = 0
-      elif event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_SPACE:
-          jump = 5
-        elif event.key == pygame.K_a:
-          xmove = -50
-        elif event.key == pygame.K_d:
-          xmove = 50
+      elif event.type == pygame.KEYDOWN:          # check for key presses          
+        if event.key == pygame.K_LEFT:        # left arrow turns left
+            pressed_left = True
+        elif event.key == pygame.K_RIGHT:     # right arrow turns right
+            pressed_right = True
+      elif event.type == pygame.KEYUP:            # check for key releases
+        if event.key == pygame.K_LEFT:        # left arrow turns left
+            pressed_left = False
+        elif event.key == pygame.K_RIGHT:     # right arrow turns right
+            pressed_right = False
         elif event.key == pygame.K_ESCAPE:
           loop = 0
           break
-      elif event.type == pygame.KEYUP:
-        if event.key == pygame.K_SPACE:
-          jump = 0
-        elif (event.key == pygame.K_a) or (event.key == pygame.K_d):
-          xmove = 0
-      ####
-      playerx += xmove
+    if pressed_left:
+      playerx -= x_speed
+    if pressed_right:
+      playerx += x_speed
+
     clock.tick(60)
     pygame.display.flip()
     if tick == 44:
