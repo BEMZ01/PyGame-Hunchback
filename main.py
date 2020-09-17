@@ -2,6 +2,12 @@ import pygame
 import random
 import time
 import os
+import logging
+from datetime import datetime
+logging.basicConfig(filename=str(datetime.now())+'.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+def pprint(text):
+  print(text)
+  logging.debug(str(datetime.now())+" :\t"+str(text))
 pygame.init()
 try:
   pygame.mixer.init()
@@ -21,22 +27,6 @@ PURPLE = (255, 0, 255)
 COLORS = [(0, 0, 0), (255, 255, 255), (0, 255, 0), (255, 0, 0), (0, 0, 255)]
 #prepare colors
 
-class Player(pygame.sprite.Sprite):
-    """
-    Spawn a player
-    """
-
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.images = []
-
-        img = pygame.image.load('assets/visual/hero/idle.PNG').convert()
-        img.convert_alpha()     # optimise alpha
-        img.set_colorkey((0, 0, 0)) # set alpha
-        self.images.append(img)
-        self.image = self.images[0]
-        self.rect = self.image.get_rect()
-
 #open window
 def init_screen_and_clock(x, y):
     global screen, display, clock
@@ -46,7 +36,6 @@ def init_screen_and_clock(x, y):
     screen = pygame.display.set_mode(WINDOW_SIZE, 0, 32)
     clock = pygame.time.Clock()
 
-
 def create_fonts(font_sizes_list):
     "Creates different fonts with one list"
     fonts = []
@@ -55,12 +44,10 @@ def create_fonts(font_sizes_list):
             pygame.font.SysFont("Arial", size))
     return fonts
 
-
 def render(fnt, what, color, where):
     "Renders the fonts as passed from display_fps"
     text_to_show = fnt.render(what, 0, pygame.Color(color))
     screen.blit(text_to_show, where)
-
 
 def display_fps():
     "Data that will be rendered and blitted in _display"
@@ -69,7 +56,6 @@ def display_fps():
         what=str(int(clock.get_fps())),
         color="white",
         where=(0, 0))
-
 
 def render_menu(x, y):
   display_surface = pygame.display.set_mode((0, 0))
@@ -131,7 +117,6 @@ def game():
   pressed_right = False
   loop = 1
   tick = 0
-  
   while loop:
     tick += 1
     screen.fill(BLACK)
@@ -164,10 +149,10 @@ def game():
       tick = 0
   return(0)
 
-print("Audio -", audio)
-print("Enter Menu")
+pprint("Audio -"+str(audio))
+pprint("Enter Menu")
 if menu() == 1:
   print("Enter Game")
   game()
-print("Produced by BEMZ for A Level Computer Science.")
+pprint("Produced by BEMZ for A Level Computer Science.")
 pygame.quit()
