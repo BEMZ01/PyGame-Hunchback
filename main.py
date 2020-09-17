@@ -28,9 +28,8 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 PURPLE = (255, 0, 255)
-COLORS = [(0, 0, 0), (255, 255, 255), (0, 255, 0), (255, 0, 0), (0, 0, 255)]
+COLORS = [(0, 0, 0), (255, 255, 255), (0, 255, 0), (255, 0, 0), (0, 0, 255), (255, 0, 255)]
 #prepare colors
-
 #open window
 def init_screen_and_clock(x, y):
     global screen, display, clock
@@ -81,9 +80,9 @@ init_screen_and_clock(x, y)
 gameDisplay = pygame.display.set_mode((x,y))
 # This create different font size in one line
 fonts = create_fonts([32, 16, 14, 8])
-for x in range(0, 10):
-    time.sleep(0.05)
-    screen.fill(random.choice(COLORS))
+for x in range(0, 100):
+    time.sleep(0.01)
+    screen.fill((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
     pygame.display.flip()
 
 def player(x,y):
@@ -108,7 +107,7 @@ def menu():
                 if event.key == pygame.K_ESCAPE:
                   loop = 0
                   break
-    clock.tick(60)
+    clock.tick(16)
     pygame.display.flip()
     if tick == 44:
       tick = 0
@@ -117,41 +116,50 @@ def menu():
 def game():
   playerx = 100
   playery = 100
-  cooldown = False
+  tempy = 0
   x = 0
-  jump = False
+  y = 0
+  isJump = False
+  jumpCount = 5
   loop = 1
   tick = 0
   while loop:
+    
     tick += 1
     screen.fill(BLACK)
+    if playery < 0:
+      playery = 0
     if playerx > 0 and playerx < 701:
-      player(playerx, 100)
+      player(playerx, playery)
     else:
       playerx = 0
-      player(playerx, 100)
+      player(playerx, playery)
     display_fps()
     keys = pygame.key.get_pressed()
     if keys[pygame.K_ESCAPE]:
       loop = 0
       break
-    elif keys[pygame.K_a]:
+    if keys[pygame.K_a]:
       x = -1
-    elif keys[pygame.K_d]:
+    if keys[pygame.K_d]:
       x = 1
-    elif keys[pygame.K_w]:
-      jump = True
+    if keys[pygame.K_w]:
+      isJump = True
     else:
       x = 0
-      jump = False
-    if jump:
-      if cooldown == False:
-        cooldown = True
-        playery += 5
-      else:
-        playery += -5
+    if not isJump:
+      tempy = playery
+    if jumpCount >= -5 and isJump:
+      y -= (jumpCount * abs(jumpCount)) * 0.5
+      jumpCount -= 1
+    else: # This will execute if our jump is finished
+      jumpCount = 5
+      isJump = False
+      playery = tempy
+      # Resetting our Variables
+    playery += y
     playerx += x
-    clock.tick(60)
+    clock.tick(120)
     pygame.display.flip()
     if tick == 44:
       tick = 0
@@ -160,8 +168,11 @@ def game():
 
 pprint("Audio -"+str(audio))
 pprint("Enter Menu")
-if menu() == 1:
-  print("Enter Game")
-  game()
+try:
+  if menu() == 1:
+    pprint("Enter Game")
+    game()
+except Exception as err:
+  pprint("Crashed! Error "+str(err))
 pprint("Produced by BEMZ for A Level Computer Science.")
 pygame.quit()
