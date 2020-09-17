@@ -8,7 +8,7 @@ try: # linux
   logging.basicConfig(filename='logs/'+str(datetime.now())+'.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 except OSError: # windows
   logging.basicConfig(filename='logs/'+str(datetime.now()).replace(":", ";")+'.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
-
+logging.basicConfig(filename='logs/latest.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 def pprint(text):
   print(text)
   logging.debug(str(datetime.now())+" -\t"+str(text))
