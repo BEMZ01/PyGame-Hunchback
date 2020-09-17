@@ -1,7 +1,7 @@
 import pygame
 import random
 import time
-import os
+import os 
 import logging
 from datetime import datetime
 try: # linux
@@ -139,9 +139,9 @@ def game():
     if keys[pygame.K_ESCAPE]:
       loop = 0
       break
-    if keys[pygame.K_a]:
+    elif keys[pygame.K_a]:
       x = -1
-    if keys[pygame.K_d]:
+    elif keys[pygame.K_d]:
       x = 1
     if keys[pygame.K_w]:
       isJump = True
@@ -163,7 +163,6 @@ def game():
     pygame.display.flip()
     if tick == 44:
       tick = 0
-      cooldown = False
   return(0)
 
 pprint("Audio -"+str(audio))
