@@ -1,6 +1,7 @@
 import pygame
 import random
 import time
+import os
 pygame.init()
 try:
   pygame.mixer.init()
@@ -19,6 +20,22 @@ BLUE = (0, 0, 255)
 PURPLE = (255, 0, 255)
 COLORS = [(0, 0, 0), (255, 255, 255), (0, 255, 0), (255, 0, 0), (0, 0, 255)]
 #prepare colors
+
+class Player(pygame.sprite.Sprite):
+    """
+    Spawn a player
+    """
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.images = []
+
+        img = pygame.image.load('assets/visual/hero/idle.PNG').convert()
+        img.convert_alpha()     # optimise alpha
+        img.set_colorkey((0, 0, 0)) # set alpha
+        self.images.append(img)
+        self.image = self.images[0]
+        self.rect = self.image.get_rect()
 
 #open window
 def init_screen_and_clock(x, y):
@@ -79,6 +96,11 @@ for x in range(0, 10):
     screen.fill(random.choice(COLORS))
     pygame.display.flip()
 
+def player(x,y):
+  display_surface = pygame.display.set_mode((0, 0))
+  image = pygame.image.load(r'assets/visual/hero/idle.PNG') 
+  display_surface.blit(image, (x, y))
+
 def menu():
   loop = 1
   tick = 0
@@ -103,22 +125,25 @@ def menu():
   return(0) # there was an error
 
 def game():
+  playerx = 100
+  xmove = 0
   loop = 1
   tick = 0
   while loop:
     tick += 1
     screen.fill(BLACK)
+    player(playerx, 100)
     display_fps()
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         loop = 0
       elif event.type == pygame.KEYDOWN:
         if event.key == pygame.K_SPACE:
-          jump = 1
+          jump = 5
         elif event.key == pygame.K_a:
-          xmove = -5
+          xmove = -50
         elif event.key == pygame.K_d:
-          xmove = 5
+          xmove = 50
         elif event.key == pygame.K_ESCAPE:
           loop = 0
           break
@@ -127,6 +152,8 @@ def game():
           jump = 0
         elif (event.key == pygame.K_a) or (event.key == pygame.K_d):
           xmove = 0
+      ####
+      playerx += xmove
     clock.tick(60)
     pygame.display.flip()
     if tick == 44:
@@ -138,5 +165,5 @@ print("Enter Menu")
 if menu() == 1:
   print("Enter Game")
   game()
-print("goodbye")
+print("Produced by BEMZ for A Level Computer Science.")
 pygame.quit()
