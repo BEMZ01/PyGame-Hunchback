@@ -93,6 +93,9 @@ def menu():
         elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     return(1)
+                if event.key == pygame.K_ESCAPE:
+                  loop = 0
+                  break
     clock.tick(60)
     pygame.display.flip()
     if tick == 44:
@@ -116,6 +119,9 @@ def game():
           xmove = -5
         elif event.key == pygame.K_d:
           xmove = 5
+        elif event.key == pygame.K_ESCAPE:
+          loop = 0
+          break
       elif event.type == pygame.KEYUP:
         if event.key == pygame.K_SPACE:
           jump = 0
